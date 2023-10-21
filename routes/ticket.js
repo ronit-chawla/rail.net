@@ -8,7 +8,6 @@ const router = express.Router();
 
 // GET A ticket
 router.get('/:id', getTicket);
-
 // POST Create a ticket
 router.post('/', createTicket);
 

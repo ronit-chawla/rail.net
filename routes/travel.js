@@ -1,9 +1,26 @@
 const express = require('express');
-const { getTravel } = require('../controllers/travel');
+const {
+  getTravel,
+  getServices,
+  requestService,
+  requestPorter,
+  getRequests,
+  getPorterRequests,
+} = require('../controllers/travel');
 
 const router = express.Router();
 
-// GET Travel Infor
+// GET Travel Info
 router.get('/:id', getTravel);
+// GET Travel Services
+router.get('/:id/services', getServices);
+// POST request service
+router.post('/:id', requestService);
+// POST request porter
+router.post('/:id/porter', requestPorter);
+// GET requests
+router.get('/:id/requests', getRequests);
+// GET Porter Requests
+router.get('/:id/porter/requests', getPorterRequests);
 
 module.exports = router;

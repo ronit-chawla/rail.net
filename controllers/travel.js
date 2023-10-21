@@ -58,3 +58,56 @@ exports.requestService = async (req, res, next) => {
   } catch (err) {}
   res.status(201).json({});
 };
+
+// * POST Request a porter
+exports.requestPorter = async (req, res, next) => {
+  // 1. Extract travelID from request params and ticketID, type of service from the request body
+  // 2. Find ticket from that id and extract the seat num and name
+  // 3. Create request with travelID, ticketID, type, seat and name
+  // 4. Send STATUS 201
+  const { id: travelID } = req.params;
+  const { ticketID, halt } = req.body;
+  let ticket;
+  try {
+    ticket = await Ticket.findOne({ id });
+  } catch (err) {}
+  const { seat, name } = ticket;
+  const request = new Request({
+    ticketID,
+    type     : 'Porter',
+    halt,
+    seat,
+    name,
+    travelID : mongoose.Types.ObjectId(travelID),
+  });
+  try {
+    await request.save();
+  } catch (err) {}
+  res.status(201).json({});
+};
+
+// * GET Onboard requests
+exports.getRequests = async (req, res, next) => {
+  // 1. Get All Requests
+  // 2. Filter out the porter requests
+  // 3. Send STATUS 200 with the requests
+  let requests;
+  try {
+    requests = await Request.find();
+  } catch (err) {}
+  requests = requests.filter(r => r.type !== 'Porter');
+  res.status(200).json({ requests });
+};
+
+// * GET Porter requests
+exports.getPorterRequests = async (req, res, next) => {
+  // 1. Get All Requests
+  // 2. Filter out the non porter requests
+  // 3. Send STATUS 200 with the requests
+  let requests;
+  try {
+    requests = await Request.find();
+  } catch (err) {}
+  requests = requests.filter(r => r.type === 'Porter');
+  res.status(200).json({ requests });
+};
