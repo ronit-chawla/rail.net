@@ -7,6 +7,9 @@ const travelSchema = new Schema({
     type     : String,
     required : true,
   },
+  status          : {
+    type : String,
+  },
   destination     : {
     type     : String,
     required : true,
@@ -19,12 +22,12 @@ const travelSchema = new Schema({
   ],
   onboardServices : [
     {
-      type     : String,
-      required : true,
+      type : mongoose.Types.ObjectId,
+      ref  : 'Service',
     },
   ],
-  porter          : {
-    type     : Boolean,
+  id              : {
+    type     : String,
     required : true,
   },
 });

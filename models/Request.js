@@ -2,12 +2,15 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const ticketSchema = new Schema({
-  id       : {
+const requestSchema = new Schema({
+  ticketID : {
     type     : String,
     required : true,
   },
-  name     : {
+  halt     : {
+    type : String,
+  },
+  type     : {
     type     : String,
     required : true,
   },
@@ -19,7 +22,11 @@ const ticketSchema = new Schema({
     type     : Number,
     required : true,
   },
+  name     : {
+    type     : String,
+    required : true,
+  },
 });
 
-ticketSchema.set('toJSON', { getters: true });
-module.exports = mongoose.model('Ticket', ticketSchema);
+requestSchema.set('toJSON', { getters: true });
+module.exports = mongoose.model('Request', requestSchema);
