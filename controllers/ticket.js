@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Ticket = require('../models/Ticket');
 const Travel = require('../models/Travel');
+const { uid } = require('uid');
 
 // * GET Ticket Info
 exports.getTicket = async (req, res, next) => {
@@ -18,8 +19,7 @@ exports.getTicket = async (req, res, next) => {
   try {
     travel = await Travel.findById(travelID);
   } catch (err) {}
-  const { origin, destination } = travel;
-  res.status(200).json({ ...ticket, origin, destination });
+  res.status(200).json({ ticket, travel });
 };
 
 // * POST Create Ticket
@@ -28,10 +28,10 @@ exports.createTicket = async (req, res, next) => {
   // 2. Create ObjectID of the travelID
   // 3. Create Ticket & Save
   // 4. Send STATUS 201
-  const { ticket: ticketInfo, travelID } = req.body;
+  const { ticket: ticketInfo } = req.body;
   const ticket = new Ticket({
     ...ticketInfo,
-    travelID : mongoose.Types.ObjectId(travelID),
+    id : uid(7),
   });
   try {
     await ticket.save();

@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const Ticket = require('../models/Ticket');
 const Travel = require('../models/Travel');
+const Service = require('../models/Service');
 const Request = require('../models/Request');
+const { uid } = require('uid');
 
 // * GET Travel Info
 exports.getTravel = async (req, res, next) => {
@@ -16,6 +18,26 @@ exports.getTravel = async (req, res, next) => {
   res.status(200).json({ train: travel });
 };
 
+// * POST Create Travel
+exports.createTravel = async (req, res, next) => {
+  const { travel: travelInfo } = req.body;
+  const travel = new Travel({ ...travelInfo, id: uid(7) });
+  try {
+    await travel.save();
+  } catch (err) {}
+  res.status(201).json({});
+};
+
+// * POST Create Service
+exports.createService = async (req, res, next) => {
+  const { service: serviceInfo } = req.body;
+  const service = new Service({ ...serviceInfo });
+  try {
+    await service.save();
+  } catch (err) {}
+  res.status(201).json({});
+};
+
 // * GET Travel Services
 exports.getServices = async (req, res, next) => {
   // 1. Extract ID from the request params
@@ -26,8 +48,8 @@ exports.getServices = async (req, res, next) => {
   let travel;
   try {
     travel = await Travel.findOne({ id });
-    await travel.populate('onboardServices');
   } catch (err) {}
+  await travel.populate('onboardServices');
   res
     .status(200)
     .json({ services: travel.onboardServices });
@@ -43,7 +65,7 @@ exports.requestService = async (req, res, next) => {
   const { ticketID, type } = req.body;
   let ticket;
   try {
-    ticket = await Ticket.findOne({ id });
+    ticket = await Ticket.findOne({ id: ticketID });
   } catch (err) {}
   const { seat, name } = ticket;
   const request = new Request({
@@ -51,12 +73,10 @@ exports.requestService = async (req, res, next) => {
     type,
     seat,
     name,
-    travelID : mongoose.Types.ObjectId(travelID),
+    travelID,
   });
-  try {
-    await request.save();
-  } catch (err) {}
-  res.status(201).json({});
+  console.log(request);
+  request.save().then(() => res.status(201).json({}));
 };
 
 // * POST Request a porter
@@ -69,7 +89,7 @@ exports.requestPorter = async (req, res, next) => {
   const { ticketID, halt } = req.body;
   let ticket;
   try {
-    ticket = await Ticket.findOne({ id });
+    ticket = await Ticket.findOne({ id: ticketID });
   } catch (err) {}
   const { seat, name } = ticket;
   const request = new Request({
@@ -78,7 +98,7 @@ exports.requestPorter = async (req, res, next) => {
     halt,
     seat,
     name,
-    travelID : mongoose.Types.ObjectId(travelID),
+    travelID,
   });
   try {
     await request.save();

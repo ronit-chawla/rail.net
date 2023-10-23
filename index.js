@@ -6,7 +6,7 @@ const ticketRoutes = require('./routes/ticket');
 const travelRoutes = require('./routes/travel');
 
 const mongoURL =
-  'mongodb+srv://ronit_c:Fue5C7P5VUieBqHl@tourcamp.alpnh.mongodb.net/?retryWrites=true&w=majority';
+  'mongodb+srv://ronit_c:Fue5C7P5VUieBqHl@tourcamp.alpnh.mongodb.net/railnet?retryWrites=true&w=majority';
 const app = express();
 
 // JSSON Parser and Headers

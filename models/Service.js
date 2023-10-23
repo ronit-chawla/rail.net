@@ -8,10 +8,10 @@ const serviceSchema = new Schema({
     required : true,
   },
   img  : {
-    type     : Boolean,
+    type     : String,
     required : true,
   },
 });
 
-stationSchema.set('toJSON', { getters: true });
+serviceSchema.set('toJSON', { getters: true });
 module.exports = mongoose.model('Service', serviceSchema);
