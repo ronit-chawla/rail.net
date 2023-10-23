@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const Ticket = require('../models/Ticket');
 const Travel = require('../models/Travel');
 const Service = require('../models/Service');
@@ -123,11 +122,14 @@ exports.getRequests = async (req, res, next) => {
 exports.getPorterRequests = async (req, res, next) => {
   // 1. Get All Requests
   // 2. Filter out the non porter requests
+  // 3. Filter out porter requests of other halts
   // 3. Send STATUS 200 with the requests
   let requests;
   try {
     requests = await Request.find();
   } catch (err) {}
-  requests = requests.filter(r => r.type === 'Porter');
+  requests = requests.filter(
+    r => r.type === 'Porter' && r.halt === req.params.halt
+  );
   res.status(200).json({ requests });
 };

@@ -27,6 +27,6 @@ router.post('/:id/porter', requestPorter);
 // GET requests
 router.get('/:id/requests', getRequests);
 // GET Porter Requests
-router.get('/:id/porter/requests', getPorterRequests);
+router.get('/:id/porter/:halt', getPorterRequests);
 
 module.exports = router;
